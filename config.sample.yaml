@@ -2,6 +2,7 @@ athenz:
   zmsUrl: "https://localhost:4443/zms/v1"
   certPath: "/Users/ajk/test_dive/251227_061159_custom_k8s-athenz-syncer/athenz_distribution/certs/athenz_admin.cert.pem"
   keyPath: "/Users/ajk/test_dive/251227_061159_custom_k8s-athenz-syncer/athenz_distribution/keys/athenz_admin.private.pem"
+  domainCrdVersion: "v1"
 
 syncer:
   parentDomain: "eks.users"

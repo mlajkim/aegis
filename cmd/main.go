@@ -28,6 +28,7 @@ import (
 	"github.com/mlajkim/aegis/internal/config"
 	"github.com/mlajkim/aegis/internal/poller"
 	"github.com/mlajkim/aegis/internal/syncer"
+	"github.com/mlajkim/aegis/internal/validator"
 	"github.com/mlajkim/aegis/pkg/athenz"
 
 	"github.com/mlajkim/aegis/internal/controller"
@@ -200,6 +201,12 @@ func main() {
 	}
 
 	k := mgr.GetClient() // kubernetes client from the manager
+
+	v := validator.New(cfg, k)
+	if v.EnsureAthenzDomainCRDExists() != nil {
+		setupLog.Error(err, "failed to ensure athenz domain CRD exists")
+		os.Exit(1)
+	}
 
 	syncerClient := syncer.New(cfg, k, athenzClient)
 	if err != nil {

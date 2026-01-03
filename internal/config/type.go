@@ -8,9 +8,10 @@ type Config struct {
 }
 
 type Athenz struct {
-	ZmsURL   string `yaml:"zmsUrl"`
-	CertPath string `yaml:"certPath"`
-	KeyPath  string `yaml:"keyPath"`
+	ZmsURL           string `yaml:"zmsUrl"`
+	CertPath         string `yaml:"certPath"`
+	KeyPath          string `yaml:"keyPath"`
+	DomainCrdVersion string `yaml:"domainCrdVersion"`
 }
 
 type Syncer struct {
