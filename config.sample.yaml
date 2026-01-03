@@ -1,0 +1,40 @@
+athenz:
+  zmsUrl: "https://localhost:4443/zms/v1"
+  certPath: "/Users/ajk/test_dive/251227_061159_custom_k8s-athenz-syncer/athenz_distribution/certs/athenz_admin.cert.pem"
+  keyPath: "/Users/ajk/test_dive/251227_061159_custom_k8s-athenz-syncer/athenz_distribution/keys/athenz_admin.private.pem"
+
+syncer:
+  parentDomain: "eks.users"
+  userTld: "user"
+  athenzRoleMembers:
+    interval: "10s"
+    includeGroup: true
+  excludedNamespaces:
+  - "kube-system"
+  - "kube-public"
+  - "default"
+  - "athenz-system"
+  - "cert-manager"
+  - "local-path-storage"
+  # customs:
+  - "kube-node-lease"
+  - "athenz"
+  - "admin"
+  # just in case:
+  - "administrator"
+  - "monitoring"
+  - "logging"
+  roles:
+  - athenzRole: "k8s_ns_admins"
+    rules:
+    - apiGroups: [ "*" ]
+      resources: [ "*" ]
+      verbs: [ "*" ]
+  - athenzRole: "k8s_ns_viewers"
+    rules:
+    - apiGroups: [ "" ]
+      resources: [ "pods", "services", "configmaps" ]
+      verbs: [ "get", "list", "watch" ]
+    - apiGroups: [ "apps" ]
+      resources: [ "deployments", "statefulsets" ]
+      verbs: [ "get", "list", "watch" ]
