@@ -26,7 +26,6 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"github.com/mlajkim/aegis/internal/config"
-	"github.com/mlajkim/aegis/internal/poller"
 	"github.com/mlajkim/aegis/internal/syncer"
 	"github.com/mlajkim/aegis/internal/validator"
 	"github.com/mlajkim/aegis/pkg/athenz"
@@ -225,12 +224,22 @@ func main() {
 	}
 	// +kubebuilder:scaffold:builder
 
-	// add poller:
-	rolePoller := poller.New(syncerClient, cfg.Syncer.ARoleMembers.Interval)
-	if err := mgr.Add(rolePoller); err != nil {
-		setupLog.Error(err, "unable to add role poller to manager")
+	if err := (&controller.AthenzDomainController{
+		Client:       k,
+		Scheme:       mgr.GetScheme(),
+		Cfg:          cfg,
+		SyncerClient: syncerClient,
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "AthenzDomain")
 		os.Exit(1)
 	}
+
+	// add poller:
+	// rolePoller := poller.New(syncerClient, cfg.Syncer.ARoleMembers.Interval)
+	// if err := mgr.Add(rolePoller); err != nil {
+	// 	setupLog.Error(err, "unable to add role poller to manager")
+	// 	os.Exit(1)
+	// }
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up health check")
