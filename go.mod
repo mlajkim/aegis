@@ -3,6 +3,7 @@ module github.com/mlajkim/aegis
 go 1.24.6
 
 require (
+	github.com/AthenZ/k8s-athenz-syncer v0.1.9-0.20251031002032-2da31062ea92
 	github.com/onsi/ginkgo/v2 v2.22.0
 	github.com/onsi/gomega v1.36.1
 	gopkg.in/yaml.v3 v3.0.1
@@ -14,7 +15,9 @@ require (
 
 require (
 	cel.dev/expr v0.24.0 // indirect
+	github.com/AthenZ/athenz v1.11.59 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
+	github.com/ardielle/ardielle-go v1.5.2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -46,6 +49,7 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
+	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

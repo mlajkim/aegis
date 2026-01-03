@@ -25,12 +25,12 @@ import (
 	// to ensure that exec-entrypoint and run can make use of them.
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
+	v1athenzdomain "github.com/AthenZ/k8s-athenz-syncer/pkg/apis/athenz/v1"
 	"github.com/mlajkim/aegis/internal/config"
+	"github.com/mlajkim/aegis/internal/controller"
 	"github.com/mlajkim/aegis/internal/syncer"
 	"github.com/mlajkim/aegis/internal/validator"
 	"github.com/mlajkim/aegis/pkg/athenz"
-
-	"github.com/mlajkim/aegis/internal/controller"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -52,7 +52,7 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-
+	utilruntime.Must(v1athenzdomain.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
