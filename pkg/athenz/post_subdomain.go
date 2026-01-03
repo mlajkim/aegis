@@ -18,6 +18,8 @@ type PostSubDomainResponse struct {
 // PostSubDomain creates a new subdomain under the specified top-level domain (tld).
 // Of course, this is not meant for TLD, where creating TLD is only for Athenz administrators.
 func (c *AthenzClient) PostSubDomain(domain string) (*PostSubDomainResponse, error) {
+	fmt.Printf("\n>>> 🕵️‍♂️ [DEBUG] PostSubDomain CALLED WITH: [%s] <<<\n\n", domain)
+
 	// before anything happens, lets first check if the domain exists:
 	if res, err := c.GetDomain(domain); err == nil {
 		return &PostSubDomainResponse{
@@ -31,11 +33,13 @@ func (c *AthenzClient) PostSubDomain(domain string) (*PostSubDomainResponse, err
 	}
 
 	_, parent, leaf := SplitDomain(domain)
+
+	fmt.Printf("\n>>> 🕵️‍♂️ [DEBUG] SplitDomain Splitted as: parent=[%s], leaf=[%s] <<<\n\n", parent, leaf)
 	resp, err := c.Post("/subdomain/"+parent, map[string]interface{}{
 		"parent":      parent,
 		"name":        leaf,
 		"description": "",
-		"org":         "k8s-athenz-syncer-the-hard-way-org",
+		"org":         "aegis-project-org",
 		"enabled":     true,
 		"adminUsers":  []string{"user.athenz_admin"},
 	})

@@ -19,6 +19,7 @@ syncer:
   - "local-path-storage"
   # customs:
   - "kube-node-lease"
+  - "kube-k8s-athenz-syncer"
   - "athenz"
   - "admin"
   # just in case:

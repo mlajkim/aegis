@@ -1,8 +1,9 @@
 package syncer
 
 import (
-	"context"
 	"fmt"
+
+	"github.com/mlajkim/aegis/pkg/athenz"
 )
 
 // NsIntoAthenzDomain's role is to create:
@@ -11,11 +12,11 @@ import (
 // for given Kubernetes namespace.
 // The Parent domain will be decided by the configuration given as "yaml:syncer.parentDomain
 // TODO: Use Solution Template in the future, if possible for quicker/efficient way of adding
-func (s *Syncer) NsIntoAthenzDomain(ctx context.Context, ns string) error {
+func (s *Syncer) NsIntoAthenzDomain(ns string) error {
 	// 1. CREATE SUB DOMAIN:
-	newDomain := fmt.Sprintf("%s.%s", s.c.Syncer.ParentDomain, ns)
-	if _, err := s.athenzClient.PostSubDomain(newDomain); err != nil {
-		return fmt.Errorf("create subdomain failed: %w", err)
+	newDomain := fmt.Sprintf("%s.%s", s.c.Syncer.ParentDomain, athenz.NsIntoDomain(ns))
+	if _, err := s.athenzClient.PostSubDomainRecursive(newDomain); err != nil {
+		return fmt.Errorf("create subdomain failed: %w, wantDomain %s", err, newDomain)
 	}
 
 	// 2. CREATE NECESSARY ROLES
