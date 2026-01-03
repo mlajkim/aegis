@@ -23,7 +23,7 @@ func New(cfg *config.Config, k client.Client, athenzClient *athenz.AthenzClient)
 // i.e) if roleName is "dev-role" and parent domain is "example.domain",
 // the returned value is "example.domain:role.dev-role"
 func (s *Syncer) buildRoleName(ns, roleName string) string {
-	return s.c.Syncer.ParentDomain + "." + ns + ":role." + roleName
+	return s.c.Syncer.ParentDomain + "." + athenz.NsIntoDomain(ns) + ":role." + roleName
 }
 
 // i.e) if roleName is "dev-role" and parent domain is "example.domain",
