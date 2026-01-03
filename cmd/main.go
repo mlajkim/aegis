@@ -234,13 +234,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// add poller:
-	// rolePoller := poller.New(syncerClient, cfg.Syncer.ARoleMembers.Interval)
-	// if err := mgr.Add(rolePoller); err != nil {
-	// 	setupLog.Error(err, "unable to add role poller to manager")
-	// 	os.Exit(1)
-	// }
-
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up health check")
 		os.Exit(1)
