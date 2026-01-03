@@ -25,7 +25,7 @@ func (s *Syncer) NsIntoK8sRole(ctx context.Context, ns string) error {
 			})
 		}
 
-		wantRole := &rbacv1.Role{ObjectMeta: metav1.ObjectMeta{Name: s.buildRoleName(ns, wantRole.AthenzRole), Namespace: ns}, Rules: rules}
+		wantRole := &rbacv1.Role{ObjectMeta: metav1.ObjectMeta{Name: s.buildRoleName(ns, wantRole.Name), Namespace: ns}, Rules: rules}
 		gotRole := &rbacv1.Role{}
 
 		err := s.k.Get(ctx, client.ObjectKeyFromObject(wantRole), gotRole)

@@ -27,12 +27,12 @@ syncer:
   - "monitoring"
   - "logging"
   roles:
-  - athenzRole: "k8s_ns_admins"
+  - name: "k8s_ns_admins"
     rules:
     - apiGroups: [ "*" ]
       resources: [ "*" ]
       verbs: [ "*" ]
-  - athenzRole: "k8s_ns_viewers"
+  - name: "k8s_ns_viewers"
     rules:
     - apiGroups: [ "" ]
       resources: [ "pods", "services", "configmaps" ]

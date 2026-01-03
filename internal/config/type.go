@@ -28,8 +28,8 @@ type Syncer struct {
 }
 
 type RoleConfig struct {
-	AthenzRole string       `yaml:"athenzRole"`
-	Rules      []PolicyRule `yaml:"rules"`
+	Name  string       `yaml:"name"`  // Name of the role both in kubernetes & Athenz
+	Rules []PolicyRule `yaml:"rules"` // K8s RBAC Policy Rules applied to the role named above
 }
 
 type PolicyRule struct {
