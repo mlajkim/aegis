@@ -44,22 +44,32 @@ type AthenzDomainController struct {
 func (r *AthenzDomainController) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := logf.FromContext(ctx)
 
-	// TODO: Add Logic Here:
-	// Isee the AthenzDomain CRD HERE! Log it out:
 	athenzDomain := &unstructured.Unstructured{}
 	athenzDomain.SetGroupVersionKind(schema.GroupVersionKind{
-		Group:   "athenz.io", // TODO: We need some kind of static SSOT for these values
-		Version: r.Cfg.Athenz.DomainCrdVersion,
-		Kind:    "AthenzDomain", // TODO: We need some kind of static SSOT for these values
+		Group:   "athenz.io",
+		Version: "v1",
+		Kind:    "AthenzDomain",
 	})
 
 	if err := r.Get(ctx, req.NamespacedName, athenzDomain); err != nil {
-		log.Error(err, "failed to get AthenzDomain CRD instance")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
-	} else {
-		log.Info("Successfully found AthenzDomain CRD", "AthenzDomain CRD Name", req.NamespacedName)
 	}
 
+	spec, found, err := unstructured.NestedMap(athenzDomain.Object, "spec")
+	if !found || err != nil {
+		log.Error(err, "AthenzDomain spec not found or invalid", "name", req.NamespacedName)
+		return ctrl.Result{}, nil
+	}
+
+	roles, found, err := unstructured.NestedSlice(spec, "domain", "roles")
+	if !found || err != nil {
+		log.Info("AthenzDomain has no roles defined", "name", req.NamespacedName)
+		return ctrl.Result{}, nil
+	} else {
+		log.Info("Roles!", "roles", roles)
+	}
+
+	log.Info("Successfully retrieved AthenzDomain spec", "Content", spec)
 	return ctrl.Result{}, nil
 }
 
