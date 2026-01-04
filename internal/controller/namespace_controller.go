@@ -68,7 +68,7 @@ func (r *NamespaceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		return ctrl.Result{}, nil
 	}
 
-	if err := r.SyncerClient.NsIntoAthenzDomain(ctx, req.Name); err != nil {
+	if err := r.SyncerClient.NsIntoAthenzDomain(req.Name); err != nil {
 		return ctrl.Result{}, err
 	}
 

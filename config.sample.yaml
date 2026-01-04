@@ -2,6 +2,7 @@ athenz:
   zmsUrl: "https://localhost:4443/zms/v1"
   certPath: "/Users/ajk/test_dive/251227_061159_custom_k8s-athenz-syncer/athenz_distribution/certs/athenz_admin.cert.pem"
   keyPath: "/Users/ajk/test_dive/251227_061159_custom_k8s-athenz-syncer/athenz_distribution/keys/athenz_admin.private.pem"
+  domainCrdVersion: "v1"
 
 syncer:
   parentDomain: "eks.users"
@@ -18,6 +19,7 @@ syncer:
   - "local-path-storage"
   # customs:
   - "kube-node-lease"
+  - "kube-k8s-athenz-syncer"
   - "athenz"
   - "admin"
   # just in case:
@@ -25,12 +27,12 @@ syncer:
   - "monitoring"
   - "logging"
   roles:
-  - athenzRole: "k8s_ns_admins"
+  - name: "k8s_ns_admins"
     rules:
     - apiGroups: [ "*" ]
       resources: [ "*" ]
       verbs: [ "*" ]
-  - athenzRole: "k8s_ns_viewers"
+  - name: "k8s_ns_viewers"
     rules:
     - apiGroups: [ "" ]
       resources: [ "pods", "services", "configmaps" ]

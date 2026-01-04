@@ -8,9 +8,10 @@ type Config struct {
 }
 
 type Athenz struct {
-	ZmsURL   string `yaml:"zmsUrl"`
-	CertPath string `yaml:"certPath"`
-	KeyPath  string `yaml:"keyPath"`
+	ZmsURL           string `yaml:"zmsUrl"`
+	CertPath         string `yaml:"certPath"`
+	KeyPath          string `yaml:"keyPath"`
+	DomainCrdVersion string `yaml:"domainCrdVersion"`
 }
 
 type Syncer struct {
@@ -27,8 +28,8 @@ type Syncer struct {
 }
 
 type RoleConfig struct {
-	AthenzRole string       `yaml:"athenzRole"`
-	Rules      []PolicyRule `yaml:"rules"`
+	Name  string       `yaml:"name"`  // Name of the role both in kubernetes & Athenz
+	Rules []PolicyRule `yaml:"rules"` // K8s RBAC Policy Rules applied to the role named above
 }
 
 type PolicyRule struct {

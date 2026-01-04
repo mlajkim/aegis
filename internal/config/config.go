@@ -52,9 +52,5 @@ func (c *Config) validate() error {
 		return fmt.Errorf("athenz.keyPath is missing")
 	}
 
-	if c.Syncer.ParentDomain == "" {
-		return fmt.Errorf("syncer.syncParentDomain is missing")
-	}
-
 	return nil
 }

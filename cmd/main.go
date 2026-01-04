@@ -25,12 +25,12 @@ import (
 	// to ensure that exec-entrypoint and run can make use of them.
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
+	v1athenzdomain "github.com/AthenZ/k8s-athenz-syncer/pkg/apis/athenz/v1"
 	"github.com/mlajkim/aegis/internal/config"
-	"github.com/mlajkim/aegis/internal/poller"
-	"github.com/mlajkim/aegis/internal/syncer"
-	"github.com/mlajkim/aegis/pkg/athenz"
-
 	"github.com/mlajkim/aegis/internal/controller"
+	"github.com/mlajkim/aegis/internal/syncer"
+	"github.com/mlajkim/aegis/internal/validator"
+	"github.com/mlajkim/aegis/pkg/athenz"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -52,7 +52,7 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-
+	utilruntime.Must(v1athenzdomain.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -201,6 +201,12 @@ func main() {
 
 	k := mgr.GetClient() // kubernetes client from the manager
 
+	v := validator.New(cfg, k)
+	if v.EnsureAthenzDomainCRDExists() != nil {
+		setupLog.Error(err, "failed to ensure athenz domain CRD exists")
+		os.Exit(1)
+	}
+
 	syncerClient := syncer.New(cfg, k, athenzClient)
 	if err != nil {
 		setupLog.Error(err, "failed to create athenz client")
@@ -218,10 +224,13 @@ func main() {
 	}
 	// +kubebuilder:scaffold:builder
 
-	// add poller:
-	rolePoller := poller.New(syncerClient, cfg.Syncer.ARoleMembers.Interval)
-	if err := mgr.Add(rolePoller); err != nil {
-		setupLog.Error(err, "unable to add role poller to manager")
+	if err := (&controller.AthenzDomainController{
+		Client:       k,
+		Scheme:       mgr.GetScheme(),
+		Cfg:          cfg,
+		SyncerClient: syncerClient,
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "AthenzDomain")
 		os.Exit(1)
 	}
 

@@ -8,6 +8,7 @@ rules:
   - ""
   resources:
   - namespaces
+  - rolebindings
   verbs:
   - create
   - delete
@@ -30,3 +31,11 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - athenz.io
+  resources:
+  - athenzdomains
+  verbs:
+  - get
+  - list
+  - watch
