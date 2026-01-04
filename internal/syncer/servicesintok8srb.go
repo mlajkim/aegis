@@ -39,6 +39,10 @@ func (s *Syncer) ServicesIntoK8sRb(ctx context.Context, ns, role string, service
 	// 3. Build rbacv1.Subject list from the services slice
 	var subjects []rbacv1.Subject
 	for _, svc := range services {
+		if svc[0:len(s.c.Syncer.UserTld)+1] != s.c.Syncer.UserTld+"." {
+			continue // not starting with user TLD ( i.e) user.* ) member, skip
+		}
+
 		subjects = append(subjects, rbacv1.Subject{
 			Kind:     "User", // Assuming Athenz services/members map to K8s Users
 			Name:     svc,

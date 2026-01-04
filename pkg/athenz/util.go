@@ -34,7 +34,26 @@ func NsIntoDomain(ns string) string {
 }
 
 // DomainIntoNs converts Athenz domain name into Kubernetes namespace name
-// i.e) "eks.users.ajktown.api" becomes "eks-users-ajktown-api" (Please note thhat if Parent Domain is defined, it should be stripped first)
-func DomainIntoNs(domain string) string {
-	return strings.ReplaceAll(domain, ".", "-")
+// It requires parentDomain to strip the parent domain part.
+func DomainIntoNs(parentDomain, domain string) string {
+	leaf := strings.TrimPrefix(domain, parentDomain+".")
+	return strings.ReplaceAll(leaf, ".", "-")
+}
+
+func FullRoleNameIntoRoleName(fullRoleName string) string {
+	parts := strings.SplitN(fullRoleName, ":role.", 2)
+	if len(parts) == 2 {
+		return parts[1]
+	}
+	return fullRoleName
+}
+
+func CombineDomains(domain1, domain2 string) string {
+	if domain1 == "" {
+		return domain2
+	}
+	if domain2 == "" {
+		return domain1
+	}
+	return domain1 + "." + domain2
 }
